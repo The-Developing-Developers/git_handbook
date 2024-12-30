@@ -51,6 +51,7 @@ Please also refer to the [Additional Information](#additional-information) secti
   - [Visual Studio Code](#visual-studio-code)
     - [Links](#links)
 
+
 # Most Common Commands and Concepts
 
 ## Add
@@ -209,6 +210,32 @@ It can also be useful to back up a branch, or to move a branch from one reposito
   ```git
   git clone <file_name.bundle> <local_root_directory_name> --branch <branch_to_restore>
   ```
+
+<!-- omit in toc -->
+### Example
+
+Suppose you have a branch called `feature` from some repository that you want to integrate, fully or partially, into another target repository. You can create a bundle file from the `feature` branch, clone it as a local temporary repository, and then add the local temporary repository as a remote to the target repository, so that you can merge the `feature` branch into the target repository, or cherry-pick the commits you are interested in.
+
+1. Create the bundle file containing the `feature` branch:
+    ```git
+    git bundle create feature.bundle feature
+    ```
+2. Clone the bundle file as a local temporary repository:
+    ```git
+    git clone feature.bundle feature_repo_temp --branch feature
+    ```
+3. Add the local temporary repository as a remote to the target repository:
+    ```git
+    git remote add feature_repo_temp <path_to_feature_repo>
+    ```
+4. Merge the `feature` branch into the target repository:
+    ```git
+    git merge feature_repo_temp/feature
+    ```
+6. Or cherry-pick the commits you are interested in:
+    ```git
+    git cherry-pick <commit_hash>
+    ```
 
 
 ## Cherry-Pick
