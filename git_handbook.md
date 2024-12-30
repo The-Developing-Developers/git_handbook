@@ -1,105 +1,41 @@
 <!-- omit in toc -->
 # Git Handbook
 
-Please also refer to the [deep dive](#approfondimenti) section.
+Please also refer to the [Additional Information](#additional-information) section.
 
 **Table of Contents**
 
-- [Add](#add)
-  - [Resources / Deep Dive](#resources--deep-dive)
-  - [Syntax](#syntax)
-- [Amend](#amend)
-  - [Resources / Deep Dive](#resources--deep-dive-1)
-  - [Syntax](#syntax-1)
-- [Branch](#branch)
-  - [Resources / Deep Dive](#resources--deep-dive-2)
-  - [Syntax](#syntax-2)
-- [Bundle](#bundle)
-  - [Syntax](#syntax-3)
-- [Cherry-Pick](#cherry-pick)
-  - [Resources / Deep Dive](#resources--deep-dive-3)
-  - [Syntax](#syntax-4)
-- [Checkout](#checkout)
-  - [Resources / Deep Dive](#resources--deep-dive-4)
-  - [Syntax](#syntax-5)
-- [Clone](#clone)
-  - [Resources / Deep Dive](#resources--deep-dive-5)
-  - [Syntax](#syntax-6)
-- [Commit](#commit)
-  - [Resources / Deep Dive](#resources--deep-dive-6)
-  - [Syntax](#syntax-7)
-- [Config](#config)
-  - [Resources / Deep Dive](#resources--deep-dive-7)
-  - [Syntax](#syntax-8)
-- [Fetch](#fetch)
-  - [Resources / Deep Dive](#resources--deep-dive-8)
-  - [Syntax](#syntax-9)
-- [Fixup](#fixup)
-  - [Resources / Deep Dive](#resources--deep-dive-9)
-  - [Syntax](#syntax-10)
-- [Fork](#fork)
-  - [Resources / Deep Dive](#resources--deep-dive-10)
-  - [Syntax](#syntax-11)
-- [Index](#index)
-  - [Resources / Deep Dive](#resources--deep-dive-11)
-  - [Syntax](#syntax-12)
-- [Init](#init)
-  - [Resources / Deep Dive](#resources--deep-dive-12)
-  - [Syntax](#syntax-13)
-- [Log](#log)
-  - [Resources / Deep Dive](#resources--deep-dive-13)
-  - [Syntax](#syntax-14)
-- [Merge](#merge)
-  - [Resources / Deep Dive](#resources--deep-dive-14)
-  - [Syntax](#syntax-15)
-- [Merge-Base](#merge-base)
-  - [Syntax](#syntax-16)
-- [Pull Request](#pull-request)
-  - [Resources / Deep Dive](#resources--deep-dive-15)
-  - [Syntax](#syntax-17)
-- [Pull](#pull)
-  - [Resources / Deep Dive](#resources--deep-dive-16)
-  - [Syntax](#syntax-18)
-- [Push](#push)
-  - [Resources / Deep Dive](#resources--deep-dive-17)
-  - [Syntax](#syntax-19)
-- [Rebase](#rebase)
-  - [Cancel a Rebase](#cancel-a-rebase)
-  - [Resources / Deep Dive](#resources--deep-dive-18)
-  - [Syntax](#syntax-20)
-- [Rebase - Interactive](#rebase---interactive)
-  - [Resources / Deep Dive](#resources--deep-dive-19)
-  - [Syntax](#syntax-21)
-- [Rebase `--onto`](#rebase---onto)
-  - [Resources](#resources)
-  - [Syntax](#syntax-22)
-- [Remote](#remote)
-  - [Glossary](#glossary)
-  - [Example of Use 1 (Using Cherry-Pick)](#example-of-use-1-using-cherry-pick)
-  - [Example of Use 2](#example-of-use-2)
-  - [Resources / Deep Dive](#resources--deep-dive-20)
-  - [Syntax](#syntax-23)
-- [Reset](#reset)
-  - [Resources / Deep Dive](#resources--deep-dive-21)
-    - [`git reset --hard ORIG_HEAD`](#git-reset---hard-orig_head)
-      - [Breaking Down the Command](#breaking-down-the-command)
-      - [Typical Use Cases for git reset --hard ORIG\_HEAD](#typical-use-cases-for-git-reset---hard-orig_head)
-  - [Syntax](#syntax-24)
-- [Restore](#restore)
-  - [Resources / Deep Dive](#resources--deep-dive-22)
-  - [Syntax](#syntax-25)
-- [Revert](#revert)
-  - [Resources / Deep Dive](#resources--deep-dive-23)
-  - [Syntax](#syntax-26)
-- [Stash](#stash)
-  - [Resources / Deep Dive](#resources--deep-dive-24)
-  - [Syntax](#syntax-27)
-- [Status](#status)
-  - [Resources / Deep Dive](#resources--deep-dive-25)
-  - [Syntax](#syntax-28)
-- [Submodules](#submodules)
-  - [Resources / Deep Dive](#resources--deep-dive-26)
-  - [Syntax](#syntax-29)
+- [Most Common Commands and Concepts](#most-common-commands-and-concepts)
+  - [Add](#add)
+  - [Amend](#amend)
+  - [Branch](#branch)
+  - [Bundle](#bundle)
+  - [Cherry-Pick](#cherry-pick)
+  - [Checkout](#checkout)
+  - [Clone](#clone)
+  - [Commit](#commit)
+  - [Config](#config)
+  - [Fetch](#fetch)
+  - [Fixup](#fixup)
+  - [Fork](#fork)
+  - [Index](#index)
+  - [Init](#init)
+  - [Log](#log)
+  - [Merge](#merge)
+  - [Merge-Base](#merge-base)
+  - [Pull Request](#pull-request)
+  - [Pull](#pull)
+  - [Push](#push)
+  - [Rebase](#rebase)
+  - [Rebase - Interactive](#rebase---interactive)
+  - [Rebase `--onto`](#rebase---onto)
+  - [Remote](#remote)
+  - [Reset](#reset)
+  - [Restore](#restore)
+  - [Revert](#revert)
+  - [Stash](#stash)
+  - [Status](#status)
+  - [Submodules](#submodules)
 - [Additional Information](#additional-information)
   - [Suggested Resources](#suggested-resources)
   - [First Configuration](#first-configuration)
@@ -110,21 +46,24 @@ Please also refer to the [deep dive](#approfondimenti) section.
     - [Linux / Ubuntu](#linux--ubuntu)
     - [GitHub CLI](#github-cli)
     - [Creating and Using an SSH Key](#creating-and-using-an-ssh-key)
-- [Self-Signed Certificate (TLS/SSL Verification)](#self-signed-certificate-tlsssl-verification)
-- [Windows Subsystem For Linux](#windows-subsystem-for-linux)
-- [Visual Studio Code](#visual-studio-code)
-  - [Links](#links)
+  - [Self-Signed Certificate (TLS/SSL Verification)](#self-signed-certificate-tlsssl-verification)
+  - [Windows Subsystem For Linux](#windows-subsystem-for-linux)
+  - [Visual Studio Code](#visual-studio-code)
+    - [Links](#links)
 
+# Most Common Commands and Concepts
 
-# Add
+## Add
 
 Allows to move any modified files from the *working area* to the *staging area*. The *staging area* is a sort of launch pad to review the changes before committing them. The commit is executed by `git commit`.
 
 To remove files from the *staging area*, use [`git restore`](#restore).
 
-## Resources / Deep Dive
+<!-- omit in toc -->
+### Resources / Deep Dive
 
-## Syntax
+<!-- omit in toc -->
+### Syntax
 
 Moves all changes made to the *working area* (new files, modified files, removed files) to the *staging area*:
 ```git
@@ -146,7 +85,7 @@ Moves only a specific file to the *staging area*:
 git add <filename>
 ```
 
-# Amend
+## Amend
 
 The `git commit --amend` command is a convenient way to modify the most recent commit. It lets you combine staged changes with the previous commit instead of creating an entirely new commit. It can also be used to simply edit the previous commit message without changing its snapshot.
 
@@ -170,11 +109,13 @@ There are two commonly used variants; both allow you to avoid opening the editor
 **Note**: `git amend` acts only on the *last* commit in time order. If you want to change a previous commit, i.e. from the penultimate onwards, you need to use [fixup](#fixup) or [interactive rebase](#rebase---interactive).
 
 
-## Resources / Deep Dive
+<!-- omit in toc -->
+### Resources / Deep Dive
 
 - [Atlassian](https://www.atlassian.com/git/tutorials/rewriting-history#git-commit--amend)
 
-## Syntax
+<!-- omit in toc -->
+### Syntax
 
 - With interactive console to edit the commit message:
   ```git
@@ -190,7 +131,7 @@ There are two commonly used variants; both allow you to avoid opening the editor
   ```
 
 
-# Branch
+## Branch
 
 A *branch* represents an independent line of development. Branches serve as an abstraction for the edit/stage/commit process. They can be thought of as a way to request a new working directory, a staging area, and a project history. New commits are recorded in the history for the current branch, resulting in a fork in the project history.
 
@@ -198,12 +139,14 @@ The `git branch` command allows you to create, list, rename, and delete branches
 
 If a remote branch is deleted by another developer, any local copy on our machine will not be affected in any way. In other words, it will be necessary to manually delete the local copy, and if we want to definitively break the link with `origin` regarding the deleted branch, we must use `git remote prune origin`, followed by a `git branch --unset-upstream`.
 
-## Resources / Deep Dive
+<!-- omit in toc -->
+### Resources / Deep Dive
 
 [Atlassian](https://www.atlassian.com/git/tutorials/using-branches)
 
 
-## Syntax
+<!-- omit in toc -->
+### Syntax
 
 - Create a new branch (cf. [checkout](#checkout)):
   ```git
@@ -246,7 +189,7 @@ If a remote branch is deleted by another developer, any local copy on our machin
   ```
 
 
-# Bundle
+## Bundle
 
 The `git bundle` command allows you to create a binary file that contains the history of a branch. This file can be shared with other developers, who can then restore the branch on their local machine.
 
@@ -255,7 +198,8 @@ This command is useful when you need to share a branch with another developer, b
 It can also be useful to back up a branch, or to move a branch from one repository to another.
 
 
-## Syntax
+<!-- omit in toc -->
+### Syntax
 
 - Create a bundle file from a branch:
   ```git
@@ -267,19 +211,21 @@ It can also be useful to back up a branch, or to move a branch from one reposito
   ```
 
 
-# Cherry-Pick
+## Cherry-Pick
 
 This command copies commits from one branch to the head of another branch. Specifically, the commits are copied to where the `HEAD` pointer is located. It is similar to the [rebase](#rebase) command, with the difference that `git cherry-pick` does not delete the source commits.
 
 **Note**: `git cherry-pick` can be considered a sort of copy-paste of commits, while `git rebase` can be considered a sort of cut-paste of commits.
 
 
-## Resources / Deep Dive
+<!-- omit in toc -->
+### Resources / Deep Dive
 
 - [Atlassian](https://www.atlassian.com/git/tutorials/cherry-pick)
 
 
-## Syntax
+<!-- omit in toc -->
+### Syntax
 
 - Copy a single commit: first position yourself on the head of the branch where you want to copy the single commit. Then you need to specify the hash of the commit to be copied:
   ```git
@@ -306,7 +252,7 @@ This command copies commits from one branch to the head of another branch. Speci
   ```
 - The command also accepts the options `--abort`, `--continue`, `--skip`, and `--quit`.
 
-# Checkout
+## Checkout
 
 The `git checkout` command is often a source of confusion because it can perform tasks that are not directly related to each other. For example:
 - Switching branches (the same operation can be more intuitively performed by `git switch <branch>`)
@@ -322,14 +268,16 @@ The `git checkout` command allows you to checkout a remote branch without having
 
 `git checkout` is also useful for viewing the status of a repository (a *snapshot*) at a certain commit, i.e. to look back in time in the history of the repository. However, this operation detaches the `HEAD` pointer from the head of each branch (*detached HEAD* condition). To resume development, remember to reattach `HEAD` to some branch, always using a checkout or a switch.
 
-## Resources / Deep Dive
+<!-- omit in toc -->
+### Resources / Deep Dive
 
 - [Git-SCM](https://git-scm.com/docs/git-checkout)
 - [Atlassian](https://www.atlassian.com/git/tutorials/using-branches/git-checkout)
 - [Comparison](https://stackoverflow.com/a/70454786/7598767) on Stack Overflow
 
 
-## Syntax
+<!-- omit in toc -->
+### Syntax
 
 - Switch branch (equivalent to `git switch <branch>`):
   ```git
@@ -349,7 +297,7 @@ The `git checkout` command allows you to checkout a remote branch without having
   ```
 
 
-# Clone
+## Clone
 
 - [Credential Management](#credential-management)
 
@@ -357,12 +305,14 @@ The `git checkout` command allows you to checkout a remote branch without having
 
 When a *clone* is executed, Git by default will copy locally only the remote branch on which the `HEAD` pointer is located. Therefore, our local copy will have only that specific branch, updated to the commit pointed to by `HEAD`. If you want to get other branches, you need to explicitly do a checkout or a *switch*.
 
-## Resources / Deep Dive
+<!-- omit in toc -->
+### Resources / Deep Dive
 
 [Atlassian](https://www.atlassian.com/git/tutorials/setting-up-a-repository/git-clone)
 
 
-## Syntax
+<!-- omit in toc -->
+### Syntax
 
 - To clone a repository (by default, only the remote branch pointed to by `HEAD`):
   ```git
@@ -374,31 +324,35 @@ When a *clone* is executed, Git by default will copy locally only the remote bra
   ```
 
 
-# Commit
+## Commit
 
 `git commit` creates a new commit, i.e. a sort of snapshot of the repository's condition at a certain point in time. Each commit is executed in the branch currently in [checkout](#checkout). Each single commit thus made will become part of the branch's history.
 
 The `git commit` command requires a commit message, which is a brief description of the changes made in the commit. The message must be enclosed in double quotes.
 
-## Resources / Deep Dive
+<!-- omit in toc -->
+### Resources / Deep Dive
 
-## Syntax
+<!-- omit in toc -->
+### Syntax
 
 Executes a new commit, with the message `commit message`:
 ```git
 git commit -m "commit message"
 ```
 
-# Config
+## Config
 
 Allows to configure the basic settings of Git, such as the default editor, or username and email address for commits. Username and email are required in particular when working with remote repositories.
 
-## Resources / Deep Dive
+<!-- omit in toc -->
+### Resources / Deep Dive
 
 [Official Documentation](https://git-scm.com/book/en/v2/Customizing-Git-Git-Configuration)
 
 
-## Syntax
+<!-- omit in toc -->
+### Syntax
 
 For each of the following commands, you can omit the `--global` argument, so as to set the configuration only for the repository of the *current working directory* (CWD). The `--global` settings will be written to the `.gitconfig` file in the `%USERPROFILE%` folder, while the local settings will be written to the `config` file in the `.git` folder in the CWD.
 
@@ -413,23 +367,25 @@ Set the default editor globally. The editor is used, for example, during [intera
 git config --global core.editor "code --new-window --wait"
 ```
 
-# Fetch
+## Fetch
 
 The `git fetch` command allows you to inspect the status of the corresponding remote branches, without however attempting to integrate the changes into the local branches (the latter is the task of [git pull](#pull)). It is essentially used to verify if the remote branches have undergone changes, without risking compromising the working copy.
 
 
-## Resources / Deep Dive
+<!-- omit in toc -->
+### Resources / Deep Dive
 
 [Atlassian](https://www.atlassian.com/git/glossary)
 
 
-## Syntax
+<!-- omit in toc -->
+### Syntax
 
 ```git
 git fetch
 ```
 
-# Fixup
+## Fixup
 
 It is used to correct a single commit (different from the last) in the history of the branch. To correct the last commit in time order, use [`git commit --amend`](#amend).
 
@@ -437,12 +393,14 @@ It is used to correct a single commit (different from the last) in the history o
 
 **Note**: `git commit --fixup` is a simplified variant of [interactive rebase](#rebase---interactive).
 
-## Resources / Deep Dive
+<!-- omit in toc -->
+### Resources / Deep Dive
 
 - [GitLab](https://about.gitlab.com/blog/2020/11/23/keep-git-history-clean-with-interactive-rebase/#fixing-a-mistake-with-interactive-rebase)
 
 
-## Syntax
+<!-- omit in toc -->
+### Syntax
 
 To perform a fixup, you must first stage the corrective changes compared to the commit you want to correct, and then launch the command specifying the hash of the commit to be corrected. Then launch an interactive rebase, specifying the hash of the previous commit (`parent hash`): the editor will open with the selected commit already ready for the fixup.
 
@@ -458,7 +416,7 @@ git commit --fixup 1234abcd
 git rebase -i 1234abcd^ --autosquash
 ```
 
-# Fork
+## Fork
 
 **Forks** let you make changes to a project without affecting the original repository, also known as the **upstream** repository. After you fork a repository, you can fetch updates from the upstream repository to keep your fork up to date, and you can propose changes from your fork to the upstream repository with [pull requests](#pull-request). A fork can be owned by either a personal account or an organization.
 
@@ -473,16 +431,18 @@ git rebase -i 1234abcd^ --autosquash
 - Although the upstream is public, you cannot contribute to it without being a collaborator. Forks were created for this reason: once the change has been developed in the fork, it can be proposed to the owner of the upstream via [pull request](#pull-request) (or similar mechanism if the hosting is not GitHub).
 - It is also possible to create a [duplicate](https://docs.github.com/en/repositories/creating-and-managing-repositories/duplicating-a-repository), but without the benefits of the fork (for example, there will be no possibility of making [pull requests](#pull-request)).
 
-## Resources / Deep Dive
+<!-- omit in toc -->
+### Resources / Deep Dive
 
 - [GitHub](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/about-forks)
 
 
-## Syntax
+<!-- omit in toc -->
+### Syntax
 
 The forking procedure is typically carried out through the portal (GitHub, GitLab, etc.), or through a specific desktop client (GitHub Desktop, GitKraken, Visual Studio Code, etc.).
 
-# Index
+## Index
 
 Git has a file called the *index* that it uses to keep track of the file changes over the three areas: working directory, staging area, and repository.
 
@@ -490,14 +450,16 @@ The *index* is a binary file that contains a sorted list of path names, each wit
 
 The *index* is updated with the `git add` command, which adds changes in the working directory to the staging area. The `git commit` command then takes the changes in the staging area and makes a new commit in the repository.
 
-## Resources / Deep Dive
+<!-- omit in toc -->
+### Resources / Deep Dive
 
 [Konrad 126](https://konrad126.medium.com/understanding-git-index-4821a0765cf)
 
 
-## Syntax
+<!-- omit in toc -->
+### Syntax
 
-# Init
+## Init
 
 Initializes a local Git repository: the information necessary for Git to function correctly will be written to files in the hidden subfolder `.git`.
 
@@ -520,16 +482,18 @@ If you already have a local Git repository and want to link it to GitHub:
    - `git push -u origin <branch_name>` to publish the local branch `<branch_name>` to GitHub and set its *tracking*.
 
 
-## Resources / Deep Dive
+<!-- omit in toc -->
+### Resources / Deep Dive
 
-## Syntax
+<!-- omit in toc -->
+### Syntax
 
 Initializes the CWD to be used as a local Git repository, creating the hidden folder `.git`:
 ```git
 git init
 ```
 
-# Log
+## Log
 
 (*From Atlassian*) The git log command displays committed snapshots. It lets you list the project history, filter it, and search for specific changes.
 
@@ -539,12 +503,14 @@ The `git log` command displays committed snapshots. It lets you list the project
 
 Log output can be customized in several ways, from simply filtering commits to displaying them in a completely user-defined format. Some of the most common configurations of `git log` are presented below.
 
-## Resources / Deep Dive
+<!-- omit in toc -->
+### Resources / Deep Dive
 
 - [Atlassian](https://www.atlassian.com/git/tutorials/inspecting-a-repository#git-log)
 
 
-## Syntax
+<!-- omit in toc -->
+### Syntax
 
 Display the entire log in a scrollable form from the command line:
 ```git
@@ -557,7 +523,7 @@ git log --oneline
 ```
 
 
-# Merge
+## Merge
 
 The "classic" merge (***three-way merge***) merges two branches, creating a new commit specifically dedicated to it. The changes introduced in the two branches are merged into a single commit that will be part of the history of both branches. The *three-way merge* is so called because it is based on three commits: the heads of the two branches to be merged, and the common ancestor commit between the two branches.
 
@@ -565,12 +531,14 @@ The ***fast-forward merge*** can be applied when the source branch (i.e. the one
 
 Some cloud-based services such as GitHub or BitBucket offer the possibility to perform a ***merge-rebase***: typically, this feature is used to bring a development branch back into a target branch, typically `development`, or `main`. In GitHub, this operation consists of copying, with optional [auto-squash](#rebase---interactive), the commits of the development branch to the head of the target branch, very similar to a [cherry-pick](#cherry-pick). The final result is different from a *three-way merge*, in the sense that the relationship between the development branch and the target branch is not lost: this is typically indicated with an arc that connects the head of the development branch to the new merge commit just created in the target branch.
 
-## Resources / Deep Dive
+<!-- omit in toc -->
+### Resources / Deep Dive
 
 - [Atlassian](https://www.atlassian.com/git/tutorials/using-branches/git-merge)
 
 
-## Syntax
+<!-- omit in toc -->
+### Syntax
 
 - *Three-way merge*: the source branch is merged into the receiving branch. The receiver must be in checkout:
   ```git
@@ -586,18 +554,19 @@ Some cloud-based services such as GitHub or BitBucket offer the possibility to p
   ```
 
 
-# Merge-Base
+## Merge-Base
 
 This command simply finds the common ancestor between two branches that have started to diverge. It can be useful when performing a [`git rebase`](#rebase) of an entire branch on itself, i.e. to rewrite the entire history of the branch.
 
-## Syntax
+<!-- omit in toc -->
+### Syntax
 
 - Returns the *hash* of the commit in common between the `first_branch` and `second_branch` branches:
   ```git
   git merge-base first_branch second_branch
   ```
 
-# Pull Request
+## Pull Request
 
 **Pull Requests** let you tell others about changes you've pushed to a branch in a repository on GitHub. Once a pull request is opened, you can discuss and review the potential changes with collaborators and add follow-up commits before your changes are merged into the base branch.
 
@@ -613,7 +582,8 @@ Suppose, for example, that a pull request has been opened from the `feature` bra
 - Conclude the pull request on GitHub (or with a similar mechanism on other hosting sites).
 
 
-## Resources / Deep Dive
+<!-- omit in toc -->
+### Resources / Deep Dive
 
 - [GitHub - About pull requests](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests)
 - [GitHub - Creating a pull request](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request)
@@ -622,11 +592,12 @@ Suppose, for example, that a pull request has been opened from the `feature` bra
 - [GitHub - Pull request reviews](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/reviewing-changes-in-pull-requests/about-pull-request-reviews)
 - [GitHub - Simple pull request example](https://github.com/firstcontributions/first-contributions)
 
-## Syntax
+<!-- omit in toc -->
+### Syntax
 
 The pull request procedure (or merge request for GitLab) is typically carried out through the portal (GitHub, GitLab, etc.), or through a specific desktop client (GitHub Desktop, GitKraken, Visual Studio Code, etc.).
 
-# Pull
+## Pull
 
 (Compare with [push](#push)).
 
@@ -663,12 +634,14 @@ As an alternative to the *merge* mechanism just described, which is the default 
   ```
 
 
-## Resources / Deep Dive
+<!-- omit in toc -->
+### Resources / Deep Dive
 
 [Atlassian](https://www.atlassian.com/git/tutorials/syncing/git-pull)
 
 
-## Syntax
+<!-- omit in toc -->
+### Syntax
 
 - The command typically requires specifying both the remote repository (`remote`) and the branch on which to perform the pull (`branch`), although both are optional (the default of `remote` is `origin`, and the default of `branch` is the branch currently in checkout):
   ```git
@@ -685,7 +658,7 @@ As an alternative to the *merge* mechanism just described, which is the default 
   ```
 
 
-# Push
+## Push
 
 The *push* operation is in many ways the dual of [pull](#pull): if the local branch is ahead of the corresponding remote branch, the local commits will be copied to the remote branch with a *fast-forward* [merge](#merge). In case of conflicts, i.e. when a *fast-forward merge* is not possible (for example because the remote and local branches have started to diverge), the *push* is interrupted, and it will be the user's responsibility to resolve the conflicts manually.
 
@@ -695,11 +668,13 @@ To publish a local branch, i.e. to create a remote counterpart that is hooked to
 
 *Push* is also used to delete a remote branch, after it has been deleted locally.
 
-## Resources / Deep Dive
+<!-- omit in toc -->
+### Resources / Deep Dive
 
 [Atlassian](https://www.atlassian.com/git/tutorials/syncing/git-push)
 
-## Syntax
+<!-- omit in toc -->
+### Syntax
 
 - The command typically requires specifying both the remote repository (`remote`) and the branch on which to perform the push (`branch`), although both are optional (the default of `remote` is `origin`, and the default of `branch` is the branch currently in checkout):
   ```git
@@ -744,7 +719,7 @@ To publish a local branch, i.e. to create a remote counterpart that is hooked to
   ```
 
 
-# Rebase
+## Rebase
 
 Similar to [cherry-pick](#cherry-pick), with the difference that the original commits are deleted after the copy.
 
@@ -773,21 +748,24 @@ Another field of application is as an alternative to [Merge](#merge), to obtain 
 
 Some cloud-based services such as GitHub or BitBucket offer the possibility to perform a [merge-rebase](#merge). The difference from a "classic" *three-way* [merge](#merge) is that with merge-rebase, the *Main* branch will not incorporate the history of the *Feature* branch into its own history. In other words, merge-rebase only incorporates the new commits, without keeping track of the history of *Feature*.
 
-## Cancel a Rebase
+<!-- omit in toc -->
+### Cancel a Rebase
 
 You can cancel the last rebase performed by [resetting](#git-reset---hard-orig_head) to the `ORIG_HEAD` commit:
 ```git
 git reset --hard ORIG_HEAD
 ```
 
-## Resources / Deep Dive
+<!-- omit in toc -->
+### Resources / Deep Dive
 
 - [Atlassian - Git Rebase](https://www.atlassian.com/git/tutorials/rewriting-history/git-rebase)
 - [Atlassian - Git Merging VS Rebasing](https://www.atlassian.com/git/tutorials/merging-vs-rebasing) (In particular, the **Workflow Walkthrough** section)
 - [Woman On Rails](https://womanonrails.com/git-rebase-onto)
 
 
-## Syntax
+<!-- omit in toc -->
+### Syntax
 
 - Simplified command (only the destination is specified, i.e. the new base: the branch currently in checkout is the one to be rebased):
   ```git
@@ -808,7 +786,7 @@ git reset --hard ORIG_HEAD
 - The command also accepts the `--abort`, `--continue`, `--skip`, and `--quit` options.
 
 
-# Rebase - Interactive
+## Rebase - Interactive
 
 Compared to the [non-interactive version](#rebase), the interactive mode of the `git rebase` command allows you to modify a sequence of commits in bulk, deciding the operation to be performed individually on each commit. Launching the `git rebase` command in interactive mode starts a text editor from the terminal, through which you can specify particular actions for each of the selected commits. Since the editor is in Vim style, it is advisable to keep a [Vim Cheat Sheet](https://vim.rtorr.com/) handy. It is possible to use alternative editors to Vim, such as [Visual Studio Code](#visual-studio-code).
 
@@ -827,13 +805,15 @@ After specifying the type of action to apply to individual commits, save and clo
 
 **Note**: if the interactive rebase was used to rewrite the history of a public branch, you will need to use a `git push --force` to update the remote counterpart. Similarly, to incorporate a remote branch that has been "forced" with a `git push --force`, you will need to use `git pull --rebase`.
 
-## Resources / Deep Dive
+<!-- omit in toc -->
+### Resources / Deep Dive
 
 - [Atlassian](https://www.atlassian.com/git/tutorials/rewriting-history#git-rebase-i)
 - [GitLab](https://about.gitlab.com/blog/2020/11/23/keep-git-history-clean-with-interactive-rebase)
 - [Vim Cheat Sheet](https://vim.rtorr.com/)
 
-## Syntax
+<!-- omit in toc -->
+### Syntax
 
 - Interactive rebase to rewrite the history of a branch (`<commit hash>` is the parent commit of the same branch whose history you want to rewrite, i.e. the starting point of the branch history rewrite):
   ```git
@@ -849,18 +829,20 @@ After specifying the type of action to apply to individual commits, save and clo
   ```
 
 
-# Rebase `--onto`
+## Rebase `--onto`
 
 The `--onto` option allows you to perform an interactive rebase in which you can specify the source commit (the commits to be taken) and the destination commit (the position to move them to), both not necessarily belonging to the same branch. It can be seen as an interactive `rebase` with a higher level of automation.
 
 The `--onto` option is useful when you want to move a series of commits from one branch to another, or when you want to move a series of commits from one point in the history of a branch to another point in the same branch.
 
-## Resources
+<!-- omit in toc -->
+### Resources / Deep Dive
 
 - [Woman On Rails](https://womanonrails.com/git-rebase-onto)
 
 
-## Syntax
+<!-- omit in toc -->
+### Syntax
 
 - To remove from the same branch `<branch>` the commits from `<starting commit>` (excluded) to `<ending commit>` (included):
   ```git
@@ -897,16 +879,18 @@ The `--onto` option is useful when you want to move a series of commits from one
   ```
 
 
-# Remote
+## Remote
 
 The `git remote` command allows you to manage remote repositories and [forks](#fork).
 
-## Glossary
+<!-- omit in toc -->
+### Glossary
 
 - **Origin**: the remote counterpart of a local repository; the link between the two is automatically established when a clone is performed. When performing *pull* and *push* operations, without specifying the destination, these default to *origin*.
 - **Upstream**: any other remote repository, different from *origin*, that can be linked to a local clone. Typically used to link the original repository from which a [fork](#fork) was made. Must be explicitly specified in `git pull` and `git push` commands.
 
-## Example of Use 1 (Using Cherry-Pick)
+<!-- omit in toc -->
+### Example of Use 1 (Using Cherry-Pick)
 
 - The `A` repository is the main repository we are working on.
 - The `B` repository contains many commits we are interested in.
@@ -920,7 +904,8 @@ The `git remote` command allows you to manage remote repositories and [forks](#f
 - Remove `B` from the *remotes*:
   - `git remote remove repo_B`
 
-## Example of Use 2
+<!-- omit in toc -->
+### Example of Use 2
 
 - The standalone repository `A` is hosted on a *hosting* service.
 - From the `A` repository, the `B` *fork* is created.
@@ -930,13 +915,15 @@ The `git remote` command allows you to manage remote repositories and [forks](#f
 - Through `git remote`, we can make `A` the *upstream* of the local clone of `B`.
 - If you want *push* and *pull* operations to involve `A` (*upstream*) rather than `B` (*origin*), you must explicitly specify `upstream` in the `git push` and `git pull` commands. However, if you do not have access permissions to the *upstream*, *push* attempts will fail. To contribute to the *upstream*, use [forking](#fork) and [pull requests](#pull-request).
 
-## Resources / Deep Dive
+<!-- omit in toc -->
+### Resources / Deep Dive
 
 - [Atlassian 1](https://www.atlassian.com/git/tutorials/git-forks-and-upstreams)
 - [Atlassian 2](https://www.atlassian.com/git/tutorials/comparing-workflows/forking-workflow)
 - [Stack Overflow](https://stackoverflow.com/a/5120074/7598767)
 
-## Syntax
+<!-- omit in toc -->
+### Syntax
 
 - Display the status of the *remotes*:
   ```git
@@ -963,7 +950,7 @@ The `git remote` command allows you to manage remote repositories and [forks](#f
   git remote set-url <repo_name> <new_URL>
   ```
 
-# Reset
+## Reset
 
 Allows you to delete (actually, unlink: see below) an arbitrary number of commits from the head of a branch, moving the `HEAD` pointer back to an earlier point in history.
 
@@ -976,17 +963,20 @@ A reset commit is not immediately deleted, but remains floating and unlinked fro
 
 `git reset` also allows you to remove a file from the staging area, although version 2.23, [git restore](#restore) is the recommended method for restoring the repository's index.
 
-## Resources / Deep Dive
+<!-- omit in toc -->
+### Resources / Deep Dive
 
 - [Atlassian](https://www.atlassian.com/git/tutorials/undoing-changes/git-reset)
 - [Git Kraken](https://www.gitkraken.com/learn/git/git-reset)
 
 
-### `git reset --hard ORIG_HEAD`
+<!-- omit in toc -->
+#### `git reset --hard ORIG_HEAD`
 
 In general, the command `git reset --hard ORIG_HEAD` is used to reset the current branch to the state it was in before the most recent history-altering operation, such as a [rebase](#rebase), [merge](#merge), or hard reset.
 
-#### Breaking Down the Command
+<!-- omit in toc -->
+##### Breaking Down the Command
 
 1. `ORIG_HEAD`: This is a special Git reference that points to the commit where HEAD was located before a recent history-changing operation. Operations that set `ORIG_HEAD` include:
 
@@ -1003,7 +993,8 @@ Essentially, `ORIG_HEAD` acts as a backup reference for these situations, allowi
 - Move the `HEAD` and the current branch pointer back to the commit referenced by `ORIG_HEAD`.
 - Use the `--hard` option to reset the working directory and staging area to match this commit, discarding any changes in tracked files since that commit.
 
-#### Typical Use Cases for git reset --hard ORIG_HEAD
+<!-- omit in toc -->
+##### Typical Use Cases for git reset --hard ORIG_HEAD
 
 Here are some scenarios where this command is useful:
 
@@ -1012,7 +1003,8 @@ Here are some scenarios where this command is useful:
 - **Reverting a Hard Reset**: If you did a hard reset to a specific commit and lost some recent changes, `git reset --hard ORIG_HEAD` can take you back to the state before the reset.
 
 
-## Syntax
+<!-- omit in toc -->
+### Syntax
 
 - Reset a branch to the commit indicated by `<commit hash>`. Default option: `--mixed`
   ```git
@@ -1040,19 +1032,21 @@ Here are some scenarios where this command is useful:
   ```
 
 
-# Restore
+## Restore
 
 From version 2.23, `git restore` is the recommended method for restoring the repository's index. Specifically, `git restore` is useful for:
 
 - Removing files from the staging area (i.e. added with `git add`)
 - Removing modified files from the working directory
 
-## Resources / Deep Dive
+<!-- omit in toc -->
+### Resources / Deep Dive
 
 [Git SCM](https://git-scm.com/docs/git-restore)
 
 
-## Syntax
+<!-- omit in toc -->
+### Syntax
 
 - Remove a modified file from the working directory (i.e. discard local changes)
   ```git
@@ -1071,17 +1065,19 @@ From version 2.23, `git restore` is the recommended method for restoring the rep
   git restore --staged .
   ```
 
-# Revert
+## Revert
 
 Allows you to undo the changes introduced by an arbitrary single commit. A new commit will be created at the head of the currently checked-out branch: this new commit will contain the removal of the changes.
 
 The `git revert` command is used to apply the inverse of a commit. It is similar to an `undo` command, but it is not destructive: it does not delete the commit, but rather creates a new commit that undoes the changes introduced by the original commit.
 
-## Resources / Deep Dive
+<!-- omit in toc -->
+### Resources / Deep Dive
 
 - [Atlassian](https://www.atlassian.com/git/tutorials/undoing-changes/git-revert)
 
-## Syntax
+<!-- omit in toc -->
+### Syntax
 
 - Undo the changes introduced by the commit `<commit hash>`:
   ```git
@@ -1097,7 +1093,7 @@ The `git revert` command is used to apply the inverse of a commit. It is similar
   ```
 
 
-# Stash
+## Stash
 
 (*From Atlassian*) Temporarily shelf (or stash) changes you've made to your working copy so you can work on something else.
 
@@ -1112,12 +1108,14 @@ By default, Git won't stash changes made to untracked or ignored files.
 If the changes on your branch diverge from the changes in your stash, you may run into conflicts when popping or applying your stash. Instead, you can use `git stash branch` to create a new branch to apply your
 stashed changes to.
 
-## Resources / Deep Dive
+<!-- omit in toc -->
+### Resources / Deep Dive
 
 - [Atlassian](https://www.atlassian.com/git/tutorials/saving-changes/git-stash)
 
 
-## Syntax
+<!-- omit in toc -->
+### Syntax
 
 - Create a stash:
   ```git
@@ -1144,7 +1142,7 @@ stashed changes to.
   git stash branch <new branch's name>
   ```
 
-# Status
+## Status
 
 (*From Atlassian*) The `git status` command displays the state of the working directory and the staging area.
 
@@ -1152,15 +1150,17 @@ Also see [`git log`](#log).
 
 The `git status` command displays the state of the working directory and the staging area. It lets you see which changes have been staged, which haven't, and which files aren't being tracked by Git. Status output does not show you any information regarding the committed project history. For this, you need to use `git log`.
 
-## Resources / Deep Dive
+<!-- omit in toc -->
+### Resources / Deep Dive
 
 - [Atlassian](https://www.atlassian.com/git/tutorials/inspecting-a-repository)
 
 
-## Syntax
+<!-- omit in toc -->
+### Syntax
 
 
-# Submodules
+## Submodules
 
 Git submodules allow you to keep a Git repository as a subdirectory of another Git repository. Git submodules are simply a reference to another repository at a particular snapshot in time. Git submodules allow a Git repository to incorporate and track the version history of external code.
 
@@ -1175,13 +1175,15 @@ To:
 - clone a repository containing submodules, without automatically downloading all submodules, perform a normal clone: by default, Git will only create the submodule folders, but will not actually download anything related to the submodules. To download and "attach" the submodules at a later time, use `git submodule init` to initialize the local configuration file, followed by `git submodule update` to perform the actual download. Once this is done, the attachment of the submodules is complete: in fact, if the folders containing the submodules were to be deleted, `git submodule update` will restore them.
 - clone a repository containing submodules, and automate the download of all submodules, clone with the `--recurse-submodules` option.
 
-## Resources / Deep Dive
+<!-- omit in toc -->
+### Resources / Deep Dive
 
 - [Atlassian](https://www.atlassian.com/git/tutorials/git-submodule)
 - [Git-SCM](https://git-scm.com/book/en/v2/Git-Tools-Submodules)
 
 
-## Syntax
+<!-- omit in toc -->
+### Syntax
 
 - List the submodules used by a repository (be careful of the branch in checkout!):
   ```git
@@ -1367,7 +1369,7 @@ Host github.com
 
 Replace `path_to_private_key` with the position of the private key generated in step 3.
 
-# Self-Signed Certificate (TLS/SSL Verification)
+## Self-Signed Certificate (TLS/SSL Verification)
 
 [Stack Overflow](https://stackoverflow.com/questions/11621768/how-can-i-make-git-accept-a-self-signed-certificate/19363404#19363404)
 
@@ -1389,12 +1391,12 @@ GIT_SSL_NO_VERIFY=true git clone https://example.com/path/to/git
 After setting this temporary environment variable (use `set` in PowerShell), you can run commands from the command line, bypassing TLS/SSL verification.
 
 
-# Windows Subsystem For Linux
+## Windows Subsystem For Linux
 
 [Windows Subsystem For Linux](https://learn.microsoft.com/en-us/windows/wsl/about) (WSL) is a lightweight virtual machine that allows you to run a Linux distribution (typically Ubuntu) directly from Windows, without the need to install virtual machines or dual partitions. The distribution is exclusively terminal-based, so there is no support for the entire graphical GUI, although it is possible to [run some graphical apps](https://ubuntu.com/tutorials/install-ubuntu-on-wsl2-on-windows-11-with-gui-support).
 
 
-# Visual Studio Code
+## Visual Studio Code
 
 Visual Studio Code can be used as an alternative to the default editor (Vim) of Git when performing operations such as an *interactive rebase*. To do this, you need to modify the `.gitconfig` file:
 
@@ -1409,7 +1411,7 @@ Add these lines:
 ```
 
 
-## Links
+### Links
 
 - [Atlassian - Glossario](https://www.atlassian.com/git/glossary)
 - [Atlassian - Rewriting History](https://www.atlassian.com/git/tutorials/rewriting-history)
