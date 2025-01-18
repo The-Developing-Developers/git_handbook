@@ -928,7 +928,7 @@ The `git remote` command allows you to manage remote repositories and [forks](#f
   - `git fetch repo_B`
 - Do the cherry-pick of the interval we are interested in:
   - `git cherry-pick <first commit>^..<last commit>`
-- Remove `B` from the *remotes*:
+- Remove `B` from the remotes:
   - `git remote remove repo_B`
 
 <!-- omit in toc -->
@@ -972,9 +972,13 @@ The `git remote` command allows you to manage remote repositories and [forks](#f
   ```git
   git remote get-url <repo_name>
   ```
-- Change the URL of a remote repository:
+- Change the URL of a remote repository. Useful for example when the repository is moved to a different hosting service, or if a submodule has been cloned with an HTTPS URL and you want to [switch to SSH](#creating-and-using-an-ssh-key):
   ```git
   git remote set-url <repo_name> <new_URL>
+  ```
+  Example:
+  ```git
+  git remote set-url origin git@github.com:Organisation-Name/repository_name.git
   ```
 
 ## Reset
@@ -1246,6 +1250,11 @@ To:
   git submodule deinit <submodule's path>
   git rm <submodule's path>
   ```
+- Change the protocol used by a submodule (e.g. from HTTPS to SSH), especially useful when the submodule is cloned with an HTTPS URL and you want to [switch to SSH](#creating-and-using-an-ssh-key):
+  ```git
+  cd <submodule's path>
+  git remote set-url origin <new URL>
+  ```
 
 
 # Additional Information
@@ -1369,22 +1378,44 @@ An alternative procedure to using [GitHub CLI](#github-cli).
 
 [Procedure](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent?platform=linux) to create and use an SSH key on Linux:
 
-1. Open the terminal
-2. To create an SSH key tied to the local machine, type `ssh-keygen -t ed25519 -C "
-3. After generating the private key, the system will ask where to place it in the filesystem. Choose a location of your choice, for example `~/.ssh/ALGORITHM`
-4. The system will then ask you to optionally enter a *passphrase*
-5. Check that the *ssh-agent* is active with `eval "$(ssh-agent -s)"`
-6. Add the key to the *ssh-agent* with `ssh-add ~/.ssh/filename`, replacing `~/.ssh/filename` with the location of the private key.
-7. Open your GitHub account
-8. Open *settings / SSH and GPG keys*
-9. Click on the "New SSH key" button
-10. Add a title of your choice, leave *Authentication Key* as *Key Type*, and copy-paste the content of the **public** key into the *Key* field (obtainable from the terminal with `cat public_key_path.pub`).
-11. Add `github.com` to the list of known *hosts* with `ssh-keyscan github.com >> ~/.ssh/known_hosts`.
-12. You can check the correct addition of the private key with `ssh-add -l`.
-13. Now you can clone a repository using the SSH protocol.
-14. You may need to change the protocol in the *remote* address with `git remote set-url origin
+1. Open the terminal.
+2. To create an SSH key tied to the local machine, type:
+   ```
+   ssh-keygen -r rsa -b 4096
+   ```
+3. After generating the private key, the system will ask where to place it in the filesystem. Choose a location of your choice, for example `~/.ssh/`.
+4. The system will then ask you to optionally enter a passphrase. This is an additional layer of security, but it is not mandatory.
+5. Check that the SSH Agent is active with:
+   ```bash
+   ps aux | head -n 1; ps aux | grep 'ssh'
+   ```
+6. If it isn't, you can start it with:
+   ```
+   eval "$(ssh-agent -s)"
+   ```
+7. Add the **private** key to the SSH Agent. The private key does **not** have a `.pub` extension. Replace `~/.ssh/filename` with the location of the private key, for example `~/.ssh/id_ed25519`:
+   ```
+   ssh-add ~/.ssh/filename
+   ```
+8. Open your GitHub account
+9.  Open *settings / SSH and GPG keys*
+10. Click on the "New SSH key" button
+11. Add a title of your choice, leave *Authentication Key* as *Key Type*, and copy-paste the content of the **public** key into the *Key* field (obtainable from the terminal with `cat public_key_path.pub`).
+12. Add `github.com` to the list of known hosts with:
+    ```
+    ssh-keyscan github.com >> ~/.ssh/known_hosts
+    ```
+13. You can check the correct addition of the private key with:
+    ```
+    ssh-add -l
+    ```
+14. Now you can clone and push to repository using the SSH protocol.
+15. You may need to change the protocol in the `remote` address with `git remote set-url origin`, especially if you have already cloned the repository with the HTTPS protocol (as in the case of submodules automatically cloned with a build preparation system such as CMake):
+    ```
+    git remote set-url origin git@github.com:Organisation-Name/repository_name.git
+    ```
 
-**Warning**: adding and using keys is a transient procedure, lasting as long as the *ssh-agent* is active. When a *reboot* is performed, the agent is no longer active, so if you want to clone another *repository*, you need to repeat the procedure for adding the key (you don't need to recreate it), i.e. from point 5 onwards.
+**Warning**: adding and using keys is a transient procedure, lasting as long as the SSH Agent is active. When a reboot is performed, the agent is no longer active, so if you want to clone another repository, you need to repeat the procedure for adding the key (you don't need to recreate it), i.e. from point 5 onwards. If you want to make the agent persistent, you need to add the command `eval "$(ssh-agent -s)"` to the `.bashrc` file.
 
 Alternatively, you can create the `config` file in `~/.ssh` and indicate the position of the private key with the following instructions:
 ```bash
