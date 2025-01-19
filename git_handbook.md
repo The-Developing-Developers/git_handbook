@@ -36,6 +36,14 @@ Please also refer to the [Additional Information](#additional-information) secti
   - [Stash](#stash)
   - [Status](#status)
   - [Submodules](#submodules)
+- [Useful Workflows](#useful-workflows)
+  - [Amend and Push-Force](#amend-and-push-force)
+  - [Backup a Branch (Bundle)](#backup-a-branch-bundle)
+  - [Backup a Branch (Create a Copy Pointer)](#backup-a-branch-create-a-copy-pointer)
+  - [Cancel a Rebase or Merge](#cancel-a-rebase-or-merge)
+  - [Fixup](#fixup-1)
+  - [Rebase and Squash](#rebase-and-squash)
+  - [Reset Hard](#reset-hard)
 - [Additional Information](#additional-information)
   - [Suggested Resources](#suggested-resources)
   - [First Configuration](#first-configuration)
@@ -149,7 +157,7 @@ If a remote branch is deleted by another developer, any local copy on our machin
 <!-- omit in toc -->
 ### Syntax
 
-- Create a new branch (cf. [checkout](#checkout)):
+- Create a new branch (see [checkout](#checkout)):
   ```git
   git branch <branch_name>
   ```
@@ -208,7 +216,7 @@ It can also be useful to back up a branch, or to move a branch from one reposito
   ```
 - Restore a branch from a bundle file:
   ```git
-  git clone <file_name.bundle> <local_root_directory_name> --branch <branch_to_restore>
+  git clone <file_name.bundle> <optional_local_root_directory_name> --branch <branch_to_restore>
   ```
 
 <!-- omit in toc -->
@@ -1004,22 +1012,23 @@ A reset commit is not immediately deleted, but remains floating and unlinked fro
 <!-- omit in toc -->
 #### `git reset --hard ORIG_HEAD`
 
-In general, the command `git reset --hard ORIG_HEAD` is used to reset the current branch to the state it was in before the most recent history-altering operation, such as a [rebase](#rebase), [merge](#merge), or hard reset.
+In general, the command `git reset --hard ORIG_HEAD` is used to reset the current branch and working directory to the state it was in before the most recent history-altering operation, such as a rebase, merge, or hard reset, specifically to the commit recorded in the `ORIG_HEAD` reference.
 
 <!-- omit in toc -->
 ##### Breaking Down the Command
 
-1. `ORIG_HEAD`: This is a special Git reference that points to the commit where HEAD was located before a recent history-changing operation. Operations that set `ORIG_HEAD` include:
+1. `ORIG_HEAD`: This is a special Git reference that points to the commit where `HEAD` was located before a recent history-changing operation. Operations that set `ORIG_HEAD` include:
 
-- **Rebase**: `ORIG_HEAD` points to the branch’s state before the rebase.
-- **Merge**: After a merge, `ORIG_HEAD` points to the pre-merge commit.
-- **Hard Reset**: Before a hard reset, `ORIG_HEAD` captures the previous commit, allowing you to revert the reset if needed.
-- **Cherry-pick** or **Commit Amend**: When you amend a commit or cherry-pick, `ORIG_HEAD` can point to the original commit.
+- [Rebase](#rebase): `ORIG_HEAD` points to the branch’s state before the rebase.
+- [Merge](#merge): After a merge, `ORIG_HEAD` points to the pre-merge commit.
+- Hard Reset**: Before a hard reset, `ORIG_HEAD` captures the previous commit, allowing you to revert the reset if needed.
+- [Cherry-pick](#cherry-pick) or [Amend](#amend): When you amend a commit or cherry-pick, `ORIG_HEAD` can point to the original commit.
+- [Pull](#pull) (if it involves a merge or rebase).
 
 Essentially, `ORIG_HEAD` acts as a backup reference for these situations, allowing you to go back to the branch’s state before the change.
 
 
-2. `git reset --hard ORIG_HEAD`: This command tells Git to:
+1. `git reset --hard ORIG_HEAD`: This command tells Git to:
 
 - Move the `HEAD` and the current branch pointer back to the commit referenced by `ORIG_HEAD`.
 - Use the `--hard` option to reset the working directory and staging area to match this commit, discarding any changes in tracked files since that commit.
@@ -1257,6 +1266,100 @@ To:
   ```
 
 
+# Useful Workflows
+
+A list of useful workflows and actions to be performed with Git.
+
+
+## Amend and Push-Force
+
+The [`git commit --amend`](#amend) command allows you to modify the last commit, adding new changes to it. This is useful when you have forgotten to include a file in the last commit, or when you want to modify the commit message. If you don't want to modify the commit message, you can use the `--no-edit` option.
+
+If you have already pushed the commit to the remote repository, you will need to use [`git push --force`](#push) to update the remote repository with the amended commit. If other collaborators are working on the same branch, you should inform them before using `push --force`. They can then incorporate the changes you made to the remote repository by using `git pull --rebase`.
+
+```git
+git commit --amend [--no-edit]
+git push --force
+```
+
+## Backup a Branch (Bundle)
+
+To create a backup of a branch, you can create a [bundle](#bundle) file, which acts as a compressed archive containing the branch's history.
+
+```git
+git bundle create <file name>.bundle <branch name>
+```
+
+You can restore the branch from the bundle file:
+
+```git
+git clone <file_name.bundle> <optional_local_root_directory_name> --branch <branch_to_restore>
+```
+
+## Backup a Branch (Create a Copy Pointer)
+
+To create a backup of a branch, you can create a new branch starting from the current branch. This is a much simpler method than creating a [bundle](#backup-a-branch-bundle) file.
+
+```git
+git checkout -b <backup branch name>
+```
+
+This is very useful when you want to experiment with a branch without the risk of losing the original branch.
+
+
+## Cancel a Rebase or Merge
+
+You can cancel the last performed [rebase](#rebase) or [merge](#merge) by [resetting](#git-reset---hard-orig_head) to the `ORIG_HEAD` commit.
+
+```git
+git reset --hard ORIG_HEAD
+```
+
+
+## Fixup
+
+[Fixup](#fixup) is a simplified version of the [interactive rebase](#rebase---interactive) that allows you to modify an arbitrary commit in a branch. The `^` symbol in th syntax is used to indicate the parent commit of the commit to be fixed. The steps are as follows:
+
+```git
+git commit --fixup <commit to be fixed hash>
+git rebase -i --autosquash <commit to be fixed hash>^
+```
+
+
+## Rebase and Squash
+
+This workflow is useful when you want to clean up the history of a branch, for example before merging it into the main branch. The steps are as follows:
+
+1. **Backup**: create a [backup branch](#backup-a-branch-create-a-copy-pointer) of the branch to be cleaned up. This will allow you to restore the branch in case of errors during the cleanup process.
+    ```git
+    git checkout -b <backup branch>
+    ```
+2. **Merge**: merge the main branch into the branch to be cleaned up. This will incorporate the changes made in the main branch into the branch to be cleaned up, resolving any conflicts that may arise.
+    ```git
+    git checkout <branch to be cleaned up>
+    git merge main
+    ```
+3. **Rebase-Interactive**: rebase the branch to be cleaned up on the main branch in interactive mode. This will allow you to squash the commits of the branch into a single commit, making the history of the branch cleaner.
+    ```git
+    git rebase main -i
+    ```
+4. **Squash**: a text editor will open, showing the list of commits to be squashed. Change the word `pick` to `squash` for all commits except the first one. Save and close the editor.
+5. **Edit Commit Message**: a text editor will open, allowing you to edit the commit message of the squashed commits. Save and close the editor.
+6. **Push**: push the cleaned-up branch to the remote repository.
+    ```git
+    git push
+    ```
+
+## Reset Hard
+
+
+[This command](#git-reset---hard-orig_head) is used to reset the current branch and working directory to the state it was in before the most recent history-altering operation, such as a rebase, merge, or hard reset.
+
+```git
+git reset --hard ORIG_HEAD
+```
+
+
 # Additional Information
 
 ## Suggested Resources
@@ -1471,7 +1574,7 @@ Add these lines:
 
 ### Links
 
-- [Atlassian - Glossario](https://www.atlassian.com/git/glossary)
+- [Atlassian - Glossary](https://www.atlassian.com/git/glossary)
 - [Atlassian - Rewriting History](https://www.atlassian.com/git/tutorials/rewriting-history)
 - [Atlassian - Merging VS Rebasing](https://www.atlassian.com/git/tutorials/merging-vs-rebasing)
 - [Earthly - 10 Advanced Git Commands](https://earthly.dev/blog/advanced-git-commands/)
