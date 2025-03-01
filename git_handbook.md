@@ -36,6 +36,9 @@ Please also refer to the [Additional Information](#additional-information) secti
   - [Stash](#stash)
   - [Status](#status)
   - [Submodules](#submodules)
+    - [Attaching New Submodule To Existing Repository](#attaching-new-submodule-to-existing-repository)
+    - [Cloning Repository With Submodules](#cloning-repository-with-submodules)
+    - [Cloning Repository With Submodules (Alternative)](#cloning-repository-with-submodules-alternative)
 - [Useful Workflows](#useful-workflows)
   - [Amend and Push-Force](#amend-and-push-force)
   - [Backup a Branch (Bundle)](#backup-a-branch-bundle)
@@ -1210,10 +1213,17 @@ The parent repository always points to a specific revision of the submodule cont
 - **Note 2**: each update of the reference of a submodule pointed by a parent repository must be versioned to be finalized. For example: if the currently pointed reference is `<SHA_initial>` and a developer moves it to `<SHA_final>` locally, in order for the change to be incorporated by all other collaborators, the developer must make a *commit* (containing the update of the reference) followed by a *push*. In this way, collaborators will
 - **Note 3**: the submodule should not be considered as a complete repository, but only as a single, specific snapshot, i.e. a reference to a commit. Therefore, if changes to the submodule are needed, it is better to open and edit it as a standalone repository (e.g. in Visual Studio Code).
 
-To:
-- attach a new submodule to an existing repository, use the `git submodule add <repository URL>` command: the `.gitmodules` file will be created (if it does not already exist), and it must be versioned. In addition, a dedicated subfolder for the submodule will be created in the hidden `.git/modules` folder. If other submodules are already present (i.e. `.gitmodules` already exists), the new submodule will be added to the list. Submodules are always attached from the branch in checkout when the *add* operation is performed, because the presence or absence of submodules depends on `.gitmodules`.
-- clone a repository containing submodules, without automatically downloading all submodules, perform a normal clone: by default, Git will only create the submodule folders, but will not actually download anything related to the submodules. To download and "attach" the submodules at a later time, use `git submodule init` to initialize the local configuration file, followed by `git submodule update` to perform the actual download. Once this is done, the attachment of the submodules is complete: in fact, if the folders containing the submodules were to be deleted, `git submodule update` will restore them.
-- clone a repository containing submodules, and automate the download of all submodules, clone with the `--recurse-submodules` option.
+### Attaching New Submodule To Existing Repository
+
+To attach a new submodule to an existing repository, use the `git submodule add <repository URL>` command: the `.gitmodules` file will be created (if it does not already exist), and it must be versioned. In addition, a dedicated subfolder for the submodule will be created in the hidden `.git/modules` folder. If other submodules are already present (i.e. `.gitmodules` already exists), the new submodule will be added to the list. Submodules are always attached from the branch in checkout when the *add* operation is performed, because the presence or absence of submodules depends on `.gitmodules`.
+
+### Cloning Repository With Submodules
+
+To clone a repository containing submodules, without automatically downloading all submodules, perform a normal clone: by default, Git will only create the submodule folders, but will not actually download anything related to the submodules. To download and "attach" the submodules at a later time, use `git submodule init` to initialize the local configuration file, followed by `git submodule update` to perform the actual download. Once this is done, the attachment of the submodules is complete: in fact, if the folders containing the submodules were to be deleted, `git submodule update` will restore them.
+
+### Cloning Repository With Submodules (Alternative)
+
+Clone a repository containing submodules, and automate the download of all submodules, clone with the `--recurse-submodules` option.
 
 <!-- omit in toc -->
 ### Resources / Deep Dive
