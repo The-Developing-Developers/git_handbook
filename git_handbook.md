@@ -200,6 +200,10 @@ If a remote branch is deleted by another developer, any local copy on our machin
   git branch -vv
   ```
 
+- Publish a local branch to a remote repository and automatically set up tracking:
+  ```git
+  git push -u origin <branch_name>
+  ```
 
 ## Bundle
 
@@ -933,7 +937,7 @@ The `git remote` command allows you to manage remote repositories and [forks](#f
 - The `A` repository is the main repository we are working on.
 - The `B` repository contains many commits we are interested in.
 - We would like to bring a number of commits from the `B` repository to the `A` repository, using the [cherry-pick](#cherry-pick) command.
-- To do this, it is necessary to first add `B` as a *remote* of the local clone of `A`:
+- To do this, it is necessary to first add `B` as a remote of the local clone of `A`:
   - `git remote add repo_B https://example.link/repository.git`
 - Now we can use [fetch](#fetch):
   - `git fetch repo_B`
@@ -963,7 +967,7 @@ The `git remote` command allows you to manage remote repositories and [forks](#f
 <!-- omit in toc -->
 ### Syntax
 
-- Display the status of the *remotes*:
+- Display the status of the remote repositories associated with the local clone:
   ```git
   git remote -v
   ```
