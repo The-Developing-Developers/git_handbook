@@ -44,13 +44,16 @@ Please also refer to the [Additional Information](#additional-information) secti
   - [Backup a Branch (Bundle)](#backup-a-branch-bundle)
   - [Backup a Branch (Create a Copy Pointer)](#backup-a-branch-create-a-copy-pointer)
   - [Cancel a Rebase or Merge](#cancel-a-rebase-or-merge)
-  - [Fixup](#fixup-1)
+  - [Create New Repository With Submodules](#create-new-repository-with-submodules)
+  - [Fixup (Correct An Individual Commit)](#fixup-correct-an-individual-commit)
   - [Rebase and Squash](#rebase-and-squash)
   - [Reset Hard](#reset-hard)
 - [Additional Information](#additional-information)
   - [Suggested Resources](#suggested-resources)
   - [First Configuration](#first-configuration)
   - [Creating a New Repository](#creating-a-new-repository)
+    - [1. Create a New Repository Through a Hosting Service](#1-create-a-new-repository-through-a-hosting-service)
+    - [2. Create a New Repository Locally](#2-create-a-new-repository-locally)
   - [Excluding From Versioning (`.gitignore`)](#excluding-from-versioning-gitignore)
   - [Credential Management](#credential-management)
     - [Microsoft Windows](#microsoft-windows)
@@ -1330,7 +1333,33 @@ git reset --hard ORIG_HEAD
 ```
 
 
-## Fixup
+## Create New Repository With Submodules
+
+To create a new repository with submodules, you can use the `git init` command to create a new repository, and then use the `git submodule add <repository URL>` command to add the submodules. The `.gitmodules` file will be created automatically.
+
+```git
+git init <repository name>
+cd <repository name>
+git submodule add <repository URL>
+```
+
+If the repository is managed with CMake, you can use the following CMake commands to automatically manage the initialisation and update of the submodules:
+
+```CMake
+cmake_minimum_required(VERSION 3.16)
+project(<project name>)
+
+include(FetchContent)
+FetchContent_Declare(
+    <submodule name>
+    GIT_REPOSITORY <submodule URL>
+    GIT_TAG <branch or tag name>
+)
+FetchContent_MakeAvailable(<submodule name>)
+```
+
+
+## Fixup (Correct An Individual Commit)
 
 [Fixup](#fixup) is a simplified version of the [interactive rebase](#rebase---interactive) that allows you to modify an arbitrary commit in a branch. The `^` symbol in th syntax is used to indicate the parent commit of the commit to be fixed. The steps are as follows:
 
@@ -1415,7 +1444,22 @@ There are two ways:
 1. Create a new repository through a hosting service, such as GitHub, and then [clone it](#clone) locally (recommended choice)
 2. Create a new repository locally, and attach it to an empty repository created through a hosting service.
 
-The second choice is useful if you have created a repository with [Git Init](#init) without first creating a remote repository through a hosting service.
+### 1. Create a New Repository Through a Hosting Service
+
+Every major hosting service (GitHub, GitLab, Bitbucket, etc.) allows you to create a new repository through its web interface. The procedure is usually very similar across different services. After creating the repository, the hosting service will provide you with the URL to clone the repository, in HTTPS or SSH format. You can then clone it locally using the [`git clone`](#clone) command.
+
+### 2. Create a New Repository Locally
+
+If you prefer to create a new local repository using the `git init` command, you can later attach it to a remote repository created through a hosting service. To do this, you need to add the remote repository URL to your local repository using the `git remote add` command.
+
+```sh
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin <remote repository URL>
+git push -u origin main
+```
 
 
 ## Excluding From Versioning (`.gitignore`)
