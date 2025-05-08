@@ -44,6 +44,7 @@ Please also refer to the [Additional Information](#additional-information) secti
   - [Backup a Branch (Bundle)](#backup-a-branch-bundle)
   - [Backup a Branch (Create a Copy Pointer)](#backup-a-branch-create-a-copy-pointer)
   - [Cancel a Rebase or Merge](#cancel-a-rebase-or-merge)
+  - [Create and Apply a Patch](#create-and-apply-a-patch)
   - [Create New Repository With Submodules](#create-new-repository-with-submodules)
   - [Fixup (Correct An Individual Commit)](#fixup-correct-an-individual-commit)
   - [Rebase and Squash](#rebase-and-squash)
@@ -1332,6 +1333,28 @@ You can cancel the last performed [rebase](#rebase) or [merge](#merge) by [reset
 git reset --hard ORIG_HEAD
 ```
 
+
+## Create and Apply a Patch
+
+A patch file is a text file that contains differences between two versions of a file or set of files. It can be used to share changes between developers or to apply changes to a codebase.
+
+To create a patch file, you can use the `git diff` command. This will generate a diff file containing the cumulative changes between the two commits, including all intermediate changes.
+
+```git
+git diff <older commit> <newer commit> > <patch file name>.diff
+```
+
+You can also create a patch file from the changes in the working directory that have not yet been staged for commit:
+
+```git
+git diff > <patch file name>.diff
+```
+
+To apply a patch file, you can use the `git apply` command. This will apply the changes in the patch file to the working directory.
+
+```git
+git apply <patch file name>.diff
+```
 
 ## Create New Repository With Submodules
 
