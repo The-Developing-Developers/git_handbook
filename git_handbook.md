@@ -8,6 +8,7 @@ Please also refer to the [Additional Information](#additional-information) secti
 - [Most Common Commands and Concepts](#most-common-commands-and-concepts)
   - [Add](#add)
   - [Amend](#amend)
+  - [Apply](#apply)
   - [Branch](#branch)
   - [Bundle](#bundle)
   - [Cherry-Pick](#cherry-pick)
@@ -15,6 +16,7 @@ Please also refer to the [Additional Information](#additional-information) secti
   - [Clone](#clone)
   - [Commit](#commit)
   - [Config](#config)
+  - [Diff](#diff)
   - [Fetch](#fetch)
   - [Fixup](#fixup)
   - [Fork](#fork)
@@ -145,6 +147,15 @@ There are two commonly used variants; both allow you to avoid opening the editor
   ```git
   git commit --amend --no-edit
   ```
+
+
+## Apply
+
+Also see the associated [diff](#diff) command.
+
+| Command                             | Description                                   |
+| -                                   | -                                             |
+| `git apply <patch file name>.diff`  | Apply a patch file to the working directory.  |
 
 
 ## Branch
@@ -412,6 +423,20 @@ Set the default editor globally. The editor is used, for example, during [intera
 ```git
 git config --global core.editor "code --new-window --wait"
 ```
+
+## Diff
+
+Also see the associated [apply](#apply) command.
+
+| Command                           | Description                                                 |
+| -                                 | -                                                           |
+| `git diff`                        | Changes in working directory vs. index (unstaged changes).  |
+| `git diff --cached` or `--staged` | Index (staged changes) vs. HEAD.                            |
+| `git diff HEAD`                   | Working directory vs. last commit.                          |
+| `git diff <commit1> <commit2>`    | Differences between two commits.                            |
+| `git diff <branch>`               | Current branch vs. another branch.                          |
+| `git diff <options> > <file>`     | Save the diff output to a file.                             |
+
 
 ## Fetch
 
