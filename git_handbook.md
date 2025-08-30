@@ -71,6 +71,8 @@ Please also refer to the [Additional Information](#additional-information) secti
 
 # Most Common Commands and Concepts
 
+A list of the most common Git commands and concepts.
+
 ## Add
 
 Allows to move any modified files from the *working area* to the *staging area*. The *staging area* is a sort of launch pad to review the changes before committing them. The commit is executed by `git commit`.
@@ -1425,18 +1427,27 @@ This workflow is useful when you want to clean up the history of a branch, for e
     ```git
     git checkout -b <backup branch>
     ```
-2. **Merge**: merge the main branch into the branch to be cleaned up. This will incorporate the changes made in the main branch into the branch to be cleaned up, resolving any conflicts that may arise.
+2. **Rebase-Interactive**: rebase the branch to be cleaned up on the main branch in interactive mode. This will allow you to squash the commits of the branch into a single commit, making the history of the branch cleaner.
     ```git
-    git checkout <branch to be cleaned up>
-    git merge main
+    git rebase <main branch> -i
     ```
-3. **Rebase-Interactive**: rebase the branch to be cleaned up on the main branch in interactive mode. This will allow you to squash the commits of the branch into a single commit, making the history of the branch cleaner.
+3. **Text Editor**: a text editor will open, showing the list of commits to be squashed. Change the word `pick` to `squash` for all commits except the first one. Save and close the editor.
+4. **Edit Commit Message**: a text editor will open, allowing you to edit the commit message of the squashed commits. Save and close the editor.
+5. **Merge Conflicts**: if there are any merge conflicts, resolve them. When conflicts in a file are resolved, add the file with:
+    ```
+    git add <file with resolved conflicts>
+    ```
+    When all conflicts are resolved, run:
     ```git
-    git rebase main -i
+    git rebase --continue
     ```
-4. **Squash**: a text editor will open, showing the list of commits to be squashed. Change the word `pick` to `squash` for all commits except the first one. Save and close the editor.
-5. **Edit Commit Message**: a text editor will open, allowing you to edit the commit message of the squashed commits. Save and close the editor.
-6. **Push**: push the cleaned-up branch to the remote repository.
+6. **Check for Differences**: to be sure you resolved the conflicts correctly, the following two diffs must yield the same result:
+   ```git
+   git diff <main branch> <common ancestor>
+   git diff <your branch before rebase> <your branch after rebase>
+   ```
+   In both cases, you should only see the changes added by other collaborators on the main branch.
+7. **Push**: push the cleaned-up branch to the remote repository.
     ```git
     git push
     ```
