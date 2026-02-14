@@ -41,6 +41,13 @@ Please also refer to the [Additional Information](#additional-information) secti
     - [Attaching New Submodule To Existing Repository](#attaching-new-submodule-to-existing-repository)
     - [Cloning Repository With Submodules](#cloning-repository-with-submodules)
     - [Cloning Repository With Submodules (Alternative)](#cloning-repository-with-submodules-alternative)
+  - [Tags](#tags)
+    - [Why did this happen?](#why-did-this-happen)
+    - [How to Resolve It](#how-to-resolve-it)
+      - [Option 1: Replace the local tag (Recommended)](#option-1-replace-the-local-tag-recommended)
+      - [Option 2: Manual Resolution via Command Line](#option-2-manual-resolution-via-command-line)
+      - [Option 3: Delete and Re-pull](#option-3-delete-and-re-pull)
+    - [Best Practices](#best-practices)
 - [Useful Workflows](#useful-workflows)
   - [Amend and Push-Force](#amend-and-push-force)
   - [Backup a Branch (Bundle)](#backup-a-branch-bundle)
@@ -50,7 +57,10 @@ Please also refer to the [Additional Information](#additional-information) secti
   - [Create New Repository With Submodules](#create-new-repository-with-submodules)
   - [Fixup (Correct An Individual Commit)](#fixup-correct-an-individual-commit)
   - [Rebase and Squash](#rebase-and-squash)
-  - [Reset Hard](#reset-hard)
+  - [Reset `--hard`](#reset---hard)
+  - [Remove Old Branches](#remove-old-branches)
+    - [Linux](#linux)
+    - [Windows PowerShell](#windows-powershell)
 - [Additional Information](#additional-information)
   - [Suggested Resources](#suggested-resources)
   - [First Configuration](#first-configuration)
@@ -66,6 +76,7 @@ Please also refer to the [Additional Information](#additional-information) secti
   - [Self-Signed Certificate (TLS/SSL Verification)](#self-signed-certificate-tlsssl-verification)
   - [Windows Subsystem For Linux](#windows-subsystem-for-linux)
   - [Visual Studio Code](#visual-studio-code)
+    - [`difftool`](#difftool)
     - [Links](#links)
 
 
@@ -1116,6 +1127,7 @@ From version 2.23, `git restore` is the recommended method for restoring the rep
 
 - Removing files from the staging area (i.e. added with `git add`)
 - Removing modified files from the working directory
+- Restoring a file to a specific commit
 
 <!-- omit in toc -->
 ### Resources / Deep Dive
@@ -1141,6 +1153,11 @@ From version 2.23, `git restore` is the recommended method for restoring the rep
 - As above, but acts on all files in the staging area:
   ```git
   git restore --staged .
+  ```
+- Restore a file to a specific commit:
+  ```git
+  git restore    --source=<specific commit hash> <file 1 name> <file 2 name> ...
+  git restore -p --source=<specific commit hash> <file 1 name> <file 2 name> ... # Like above, but with the possibility to interactively select the changes to be restored
   ```
 
 ## Revert
@@ -1310,6 +1327,51 @@ Clone a repository containing submodules, and automate the download of all submo
   git remote set-url origin <new URL>
   ```
 
+## Tags
+
+A tag is a reference to a specific commit, used to mark important points in the history of a repository, such as releases. Tags are similar to branches, but they do not change over time: once created, a tag always points to the same commit.
+
+If you get the following error when trying to pull from a remote repository:
+
+> Unable to pull from remote repository due to conflicting tag(s): `ver_1234`. Would you like to resolve the conflict by replacing the local tag(s)?
+
+This error occurs when there is a mismatch between a **Git tag** on your local machine and a tag with the exact same name on the remote repository (e.g., GitHub, GitLab, or a Cisco internal Bitbucket instance).
+
+In Git, tags are intended to be permanent markers (like version releases). By default, Git will not overwrite a local tag if the remote version points to a different commit, as this could lead to confusion about which version of the code a tag actually represents.
+
+### Why did this happen?
+1.  **Tag Re-assignment:** Someone deleted and recreated the tag `ver_1234` on the remote server to point to a different commit (often after a hotfix or a build correction).
+2.  **Local Modification:** You (or a script) created a local tag named `ver_1234` that points to a different commit than the one stored on the server.
+
+### How to Resolve It
+
+#### Option 1: Replace the local tag (Recommended)
+If you click **"Yes"** or choose to resolve by replacing, your local Git client will delete your local version of `ver_1234` and download the remote version. This is usually the correct choice if you want your local environment to match the official "source of truth" on the server.
+
+#### Option 2: Manual Resolution via Command Line
+If you prefer to handle this via the terminal, you can force-update your tags using the following command:
+
+```bash
+git fetch --tags -f
+```
+*   `--tags`: Tells Git to fetch all tags from the remote.
+*   `-f` (or `--force`): Tells Git to overwrite local tags with the versions found on the remote.
+
+#### Option 3: Delete and Re-pull
+If you want to be extra cautious, you can manually delete the conflicting local tag first:
+
+1.  **Delete the local tag:**
+    ```bash
+    git tag -d ver_1234
+    ```
+2.  **Pull/Fetch again:**
+    ```bash
+    git fetch
+    ```
+
+### Best Practices
+*   **Avoid Moving Tags:** Generally, it is best practice not to change a tag once it has been pushed. If a release needs a fix, it is better to create a new tag (e.g., `ver_1234.1` or `ver_1235`).
+*   **Communicate with the Team:** If this error appears unexpectedly, check with your team to see if a release tag was intentionally moved.
 
 # Useful Workflows
 
@@ -1452,8 +1514,7 @@ This workflow is useful when you want to clean up the history of a branch, for e
     git push
     ```
 
-## Reset Hard
-
+## Reset `--hard`
 
 [This command](#git-reset---hard-orig_head) is used to reset the current branch and working directory to the state it was in before the most recent history-altering operation, such as a rebase, merge, or hard reset.
 
@@ -1461,6 +1522,27 @@ This workflow is useful when you want to clean up the history of a branch, for e
 git reset --hard ORIG_HEAD
 ```
 
+## Remove Old Branches
+
+If you have several local branches that have already been merged into the main branch and removed from the remote repository, you can remove them locally with the following command:
+
+### Linux
+
+```sh
+git fetch --prune # Fetches latest changes from remote and removes any references to branches that have been deleted on the remote
+git branch -vv | grep ': gone]' | awk '{print $1}' | xargs git branch -d # Displays local branches, filters those marked as "gone" (deleted on the remote), extracts branch names, deletes them locally
+```
+
+### Windows PowerShell
+
+```powershell
+git fetch --prune # Fetches latest changes from remote and removes any references to branches that have been deleted on the remote
+git branch -vv | Select-String ': gone\]' | ForEach-Object {
+  if ($_.Line -match '^[\s\*]+(?<name>[^\s]+)\s+') { $Matches.name }
+} | Where-Object { $_ } | ForEach-Object { git branch -d $_ } # Displays local branches, filters those marked as "gone" (deleted on the remote), extracts branch names, deletes them locally
+```
+
+You can use `-D` to force deletion.
 
 # Additional Information
 
@@ -1478,7 +1560,7 @@ When configuring Git for the first time on a machine, it is advisable to enter a
 
 ```git
 git config --global user.name "John Doe"
-git config --global user.email
+git config --global user.email "john.doe@example.com"
 git config --global core.editor "code --wait"
 ```
 
@@ -1688,6 +1770,20 @@ Add these lines:
   editor = code --wait
 ```
 
+### `difftool`
+
+The `difftool` command allows you to compare files using an external diff tool. To use it, you need to configure the external diff tool in the `.gitconfig` file. For example, to use Visual Studio Code as the external diff tool:
+
+```
+git config --global difftool.vscode.cmd 'code --wait --diff "$LOCAL" "$REMOTE"'
+git config --global diff.tool vscode
+```
+
+Then, to compare two commits or a commit with the working directory, you can use the following syntax:
+
+```
+git difftool <commit hash older> <commit hash newer> <file path>
+```
 
 ### Links
 
